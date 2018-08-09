@@ -2,6 +2,7 @@ import { addUser } from '../actions/actions'
 
 const defaultState = {
   user: null,
+  username: "",
   lobbyExists: false,
   lobbyName: null,
   lobbyPassword: null
@@ -29,6 +30,10 @@ export default function reducer(state = defaultState, action) {
     case "CLOSE_LOBBY":
       return {
         ...state, lobbyExists: false
+      }
+    case "ADD_USERNAME":
+      return {
+        ...state, username: action.payload
       }
     default:
       return state;

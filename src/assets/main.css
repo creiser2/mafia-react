@@ -108,7 +108,7 @@
   margin-left: 10em;
   border-radius: 0.333em;
   color: #FFF;
-
+  padding-top: 3em;
 }
 
 .back-button {
@@ -120,5 +120,5 @@
 }
 
 .big-question {
-  font-size: 5em;
+  font-size: 3em;
 }

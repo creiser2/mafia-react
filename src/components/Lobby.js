@@ -5,7 +5,7 @@ class Lobby extends Component {
   render() {
     return(
       <div className = 'gutter mxa py1 border abs fill ac'>
-
+      
       </div>
     )
   }
