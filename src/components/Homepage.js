@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const Homepage = (props) => {
-  console.log(props)
+
   return(
     <div className = 'gutter mxa py1 border abs fill ac knife'>
       <div className = 'bg-black hot-pink f jcc'>

@@ -15,6 +15,10 @@
   color: #FF4C74;
 }
 
+.blood-red {
+  color: #a50b0b;
+}
+
 .white {
   color: #FFF
 }
@@ -29,6 +33,10 @@
 
 .bg-white {
   background-color: #FFF;
+}
+
+.bg-blood-red {
+  background-color: #a50b0b;
 }
 
 .gutter {
@@ -55,6 +63,12 @@
   top: 600px
 }
 
+.mafia-button {
+  background-color: #FF4C74;
+  font-family: 'Faster One';
+  color: #FFF;
+}
+
 .mafia-font {
   font-family: 'Faster One';
 }
@@ -75,4 +89,36 @@
   background: url("/spy.jpg");
   background-size: cover;
   background-repeat: none;
+}
+
+.fll {
+  float: left;
+}
+
+.blood-border {
+  border: 1rem solid #a50b0b;
+}
+
+.name-box {
+  padding: 10px;
+  border: 5px solid #000;
+  height: 10em;
+  width: 30px;
+  margin-right: 10em;
+  margin-left: 10em;
+  border-radius: 0.333em;
+  color: #FFF;
+
+}
+
+.back-button {
+  float: left;
+  width: 80px;
+  margin-top: 0.6em;
+  font-size: 1.5em;
+  border-radius: 0.333em;
+}
+
+.big-question {
+  font-size: 5em;
 }

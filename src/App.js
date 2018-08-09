@@ -18,26 +18,37 @@ class App extends Component {
   }
 
   renderPage = () => {
+    //Decide which page to render, homepage, join lobby page, or host lobby page
     if (this.state.joinLobby) {
-      return <JoinLobby />
+      return <JoinLobby goBack={this.handleGoBack} />
     }
     else if (this.state.hostLobby) {
-      return <HostLobby />
+      return <HostLobby goBack={this.handleGoBack} />
     }
     else {
       return <Homepage joinLobbyClick={this.handleJoinLobbyClick} hostLobbyClick={this.handleHostLobbyClick}/>
     }
   }
 
+  //render join lobby page
   handleJoinLobbyClick = () => {
     this.setState({
       joinLobby: true
     })
   }
 
+  //render host lobby page
   handleHostLobbyClick = () => {
     this.setState({
       hostLobby: true
+    })
+  }
+
+  //go back to the homepage from either the host lobby or join lobby page
+  handleGoBack = () => {
+    this.setState({
+      hostLobby: false,
+      joinLobby: false
     })
   }
 
@@ -57,7 +68,9 @@ function msp(state) {
 }
 
 function mdp(dispatch) {
-
+  return {
+    
+  }
 }
 
 export default connect(msp, mdp)(App);

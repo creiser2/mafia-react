@@ -32,6 +32,8 @@
 .pb075, .py075, .p075 { padding-bottom: 0.75em }
 .pl075, .px075, .p075 { padding-left: 0.75em }
 .pr075, .px075, .p075 { padding-right: 0.75em }
+.pl20 { padding-left: 1.667em }
+.pr100 { padding-right: 8.333em }
 
 .mt1, .my1, .m1 { margin-top: 1em }
 .mb1, .my1, .m1 { margin-bottom: 1em }
