@@ -2,12 +2,28 @@ import React, { Component } from 'react';
 import SpecialForm from './SpecialForm';
 import { connect } from 'react-redux';
 
+import { API_AVAIL, HEADERS } from '../constants/api-endpoints'
 
 class JoinLobby extends Component {
 
   //join the lobby
   handleNamePasswordSubmit = (event, lobbyName, lobbyPassword) => {
-    debugger;
+    fetch(API_AVAIL, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        name: lobbyName
+      })
+    }).then(response => response.json())
+    .then(json => this.handleJoinLobby(json, lobbyName, lobbyPassword))
+  }
+
+  //if the lobby is not available, that means that the user is trying to join a lobby that exists
+  handleJoinLobby = (json, lobbyName, lobbyPassword) => {
+    //try password on lobby (make custon backend route)
+    if(!json.availability) {
+      
+    }
   }
 
   render() {
@@ -33,7 +49,12 @@ function msp(state) {
 
 function mdp(dispatch) {
   return {
-    
+    addLobbyName: (name) => {
+      dispatch({type: "ADD_LOBBY_NAME", payload: name})
+    },
+    addLobbyPassword: (password) => {
+      dispatch({type: "ADD_LOBBY_PASSWORD", payload: password})
+    }
   }
 }
 

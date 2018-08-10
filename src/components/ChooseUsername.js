@@ -35,8 +35,6 @@ class ChooseUsername extends Component {
   handleSubmit = () => {
     this.props.addUsername(this.state.usernameValue)
 
-    console.log("username", this.state.usernameValue)
-    console.log("lobbyid", this.props.lobbyId)
     //persist user in backend
     fetch(USER_ROOT, {
       method: 'POST',

@@ -13,7 +13,7 @@ class Lobby extends Component {
 
 
   render() {
-    console.log(this.props.lobbyId)
+
     return(
       <div className = 'gutter mxa py1 blood-border abs fill ac'>
         <div className = 'bg-black blood-red f jcc'>
@@ -21,9 +21,11 @@ class Lobby extends Component {
         </div>
         <div className='lobby-list'>
           {/* subscribe to the specific channel lobbies w special id */}
-          <ActionCable
-           channel={{ channel: 'LobbiesChannel', lobby_id: this.props.lobbyId }}
-          />
+            <ActionCable
+             channel={{ channel: 'LobbiesChannel', lobby_id: this.props.lobbyId }}
+             onReceived={this.updateUsers}
+            />
+
           {/* Cable specifies what we are sending, and what we will get back */}
           <Cable
             users={this.props.users}
