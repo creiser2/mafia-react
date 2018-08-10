@@ -48,7 +48,7 @@ class SpecialForm extends Component {
           <button className='s4 mafia-font bg-black hot-pink' onClick={this.handleLobbyNameClick}>LOBBY NAME</button>
         }
         {this.state.enterLobbyPassword ?
-          <input type="text" value={this.state.passwordValue} onChange={this.handlePasswordChange} className='bg-black hot-pink mafia-font' type='password'/>
+          <input type="text" value={this.state.passwordValue} onChange={this.handlePasswordChange} className='bg-black hot-pink mafia-font'/>
           :
           <button className='s4 mafia-font bg-black hot-pink' onClick={this.handleLobbyPasswordClick}>LOBBY PASSWORD</button>
         }

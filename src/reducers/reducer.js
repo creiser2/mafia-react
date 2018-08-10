@@ -1,19 +1,23 @@
-import { addUser } from '../actions/actions'
-
 const defaultState = {
-  user: null,
+  users: [],
+  user: {},
   username: "",
   lobbyExists: false,
   lobbyName: null,
-  lobbyPassword: null
+  lobbyPassword: null,
+  lobbyId: null,
 }
 
 
 export default function reducer(state = defaultState, action) {
   switch(action.type) {
-    case "ADD_USER":
+    case "SET_USER":
       return {
         ...state, user: action.payload
+      }
+    case "ADD_USER":
+      return {
+        ...state, users: action.payload
       }
     case "ADD_LOBBY_NAME":
       return {
@@ -34,6 +38,10 @@ export default function reducer(state = defaultState, action) {
     case "ADD_USERNAME":
       return {
         ...state, username: action.payload
+      }
+    case "ADD_LOBBY_ID":
+      return {
+        ...state, lobbyId: action.payload
       }
     default:
       return state;

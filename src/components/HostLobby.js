@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import SpecialForm from './SpecialForm';
 import { connect } from 'react-redux';
 import { addLobbyName } from '../actions/actions'
-import { API_AVAIL, HEADERS } from '../constants/api-endpoints'
+import { API_AVAIL, API_ROOT, HEADERS } from '../constants/api-endpoints'
 
 import ChooseUsername from './ChooseUsername'
 
@@ -26,14 +26,29 @@ class HostLobby extends Component {
       this.props.addLobbyName(lobbyName)
       this.props.addLobbyPassword(lobbyPassword)
       this.props.openLobby()
+      this.createLobby(lobbyName, lobbyPassword)
     } else {
       //handle error where lobby name is taken
 
     }
   }
 
+  //persist lobby in backend, and update redux state
+  createLobby = (lobbyName, lobbyPassword) => {
+    fetch(API_ROOT, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        name: lobbyName,
+        password: lobbyPassword
+      })
+    })
+    .then(response => response.json())
+    .then(json => this.props.addLobbyId(json.lobby.id))
+  }
+
+
   render() {
-    console.log(this.props.lobbyExists)
     return(
       <Fragment>
         {this.props.lobbyExists ?
@@ -71,6 +86,9 @@ function mdp(dispatch) {
     },
     openLobby: () => {
       dispatch({type: "OPEN_LOBBY"})
+    },
+    addLobbyId: (id) => {
+      dispatch({type: "ADD_LOBBY_ID", payload: id})
     }
   }
 }
