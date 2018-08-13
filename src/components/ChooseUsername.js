@@ -59,9 +59,7 @@ class ChooseUsername extends Component {
     return(
       <Fragment>
         {this.state.startLobby ?
-            <ActionCableProvider url={API_WS_ROOT}>
-              <Lobby />
-            </ActionCableProvider>
+            <Lobby />
           :
           <div className = 'gutter mxa py1 blood-border abs fill ac'>
             <div className = 'bg-black blood-red f jcc'>

@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import { ActionCable } from 'react-actioncable-provider';
 import { API_ROOT, API_WS_ROOT } from '../constants/api-endpoints';
 
+import ActionCable from 'actioncable'
 
 class Lobby extends Component {
 
@@ -12,6 +12,17 @@ class Lobby extends Component {
     //update redux and display list of users
     // const cable = ActionCable.createConsumer()
     this.props.setUsers(response.users)
+  }
+
+  componentDidMount = () => {
+    this.subscription = this.context.cable.subscriptions.create(
+      'LobbiesChannel',
+      {
+          received (data) {
+              console.log(data)
+          }
+      }
+    )
   }
 
   renderUsersList = () => {
@@ -29,10 +40,6 @@ class Lobby extends Component {
         <div className='lobby-list bg-hot-pink'>
           <ul className='bg-hot-pink m1 p1'>
             {/* subscribe to the specific channel lobbies w special id */}
-              <ActionCable
-                channel={{channel: 'LobbiesChannel', lobby_id: this.props.lobbyId, user_id: this.props.username}}
-                onReceived={this.updateUsers}
-              />
               {this.renderUsersList()}
             {/* Cable specifies what we are sending, and what we will get back */}
           </ul>
