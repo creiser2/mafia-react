@@ -45,6 +45,7 @@ class HostLobby extends Component {
     })
     .then(response => response.json())
     .then(json => this.props.addLobbyId(json.lobby.id))
+    .then(this.props.setHost())
   }
 
 
@@ -89,6 +90,9 @@ function mdp(dispatch) {
     },
     addLobbyId: (id) => {
       dispatch({type: "ADD_LOBBY_ID", payload: id})
+    },
+    setHost: () => {
+      dispatch({type: "SET_HOST"})
     }
   }
 }

@@ -6,6 +6,7 @@ const defaultState = {
   lobbyName: null,
   lobbyPassword: null,
   lobbyId: null,
+  isHost: false
 }
 
 
@@ -42,6 +43,18 @@ export default function reducer(state = defaultState, action) {
     case "ADD_LOBBY_ID":
       return {
         ...state, lobbyId: action.payload
+      }
+    case "SET_HOST":
+      return {
+        ...state, isHost: true
+      }
+    case "SET_ROLE":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          role: action.payload
+        }
       }
     default:
       return state;

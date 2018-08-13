@@ -2,16 +2,33 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { ActionCable } from 'react-actioncable-provider';
-import { API_ROOT, API_WS_ROOT } from '../constants/api-endpoints';
+import { API_ROOT, API_WS_ROOT, HEADERS, START_GAME, GET_LOBBY_USERS } from '../constants/api-endpoints';
+
+import Game from './Game'
+// import Cable from './Cable'
 
 
 class Lobby extends Component {
+
+  state = {
+    startGame: false
+  }
+
+  componentDidMount = () => {
+    fetch(`${GET_LOBBY_USERS}` + this.props.lobbyId)
+    .then(response => response.json())
+    .then(json => this.props.setUsers(json.data.lobby.users))
+  }
 
   //triggers where there is a change to the # of users
   updateUsers = (response) => {
     //update redux and display list of users
     // const cable = ActionCable.createConsumer()
-    this.props.setUsers(response.users)
+    if(response.startGame) {
+      this.handleGameStarted()
+    } else {
+      this.props.setUsers(response.users)
+    }
   }
 
   renderUsersList = () => {
@@ -20,24 +37,52 @@ class Lobby extends Component {
     })
   }
 
+  renderStartGameButton = () => {
+    if(this.props.isHost) {
+      return <button className='mafia-button back-button' onClick={this.startGame}>Start Game</button>
+    }
+  }
+
+  handleGameStarted = () => {
+    this.setState({
+      startGame: true
+    })
+  };
+
+  //Start the game when host decides
+  startGame = () => {
+    fetch(START_GAME, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        id: this.props.lobbyId
+      })
+    })
+  }
+
   render() {
     return(
-      <div className = 'mxa py1 bg-black abs fill ac'>
-        <div className = 'bg-hot-pink black f jcc'>
-          <h2 className='mafia-font'>{this.props.lobbyName}</h2>
-        </div>
-        <div className='lobby-list bg-hot-pink'>
-          <ul className='bg-hot-pink m1 p1'>
-            {/* subscribe to the specific channel lobbies w special id */}
+        <Fragment>
+          {this.state.startGame ?
+            <Game />
+          :
+          <div className = 'mxa py1 bg-black abs fill ac'>
+          <div className = 'bg-hot-pink black f jcc'>
+            <h2 className='mafia-font'>{this.props.lobbyName}</h2>
+            </div>
+            <div className='lobby-list bg-hot-pink'>
+            <ul className='bg-hot-pink m1 p1'>
               <ActionCable
-                channel={{channel: 'LobbiesChannel', lobby_id: this.props.lobbyId, user_id: this.props.username}}
+                channel={{channel: 'LobbiesChannel', lobby_id: this.props.lobbyId, user_id: this.props.user.id}}
                 onReceived={this.updateUsers}
               />
-              {this.renderUsersList()}
-            {/* Cable specifies what we are sending, and what we will get back */}
-          </ul>
-        </div>
-      </div>
+            {this.renderUsersList()}
+            {this.renderStartGameButton()}
+            </ul>
+          </div>
+          </div>
+        }
+      </Fragment>
     )
   }
 }
@@ -51,6 +96,7 @@ function msp(state) {
     username: state.username,
     users: state.users,
     user: state.user,
+    isHost: state.isHost
   }
 }
 

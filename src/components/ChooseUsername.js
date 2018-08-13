@@ -3,11 +3,8 @@ import React, { Component, Fragment } from 'react';
 
 import { USER_ROOT, HEADERS, API_WS_ROOT } from '../constants/api-endpoints'
 import Lobby from './Lobby'
-import { ActionCableProvider, ActionCable } from 'react-actioncable-provider';
+import { ActionCableProvider } from 'react-actioncable-provider';
 // import { ActionCable } from 'actioncable'
-// import ActionCable from 'actioncable'
-// let cable = {}
-
 
 class ChooseUsername extends Component {
 
@@ -50,7 +47,7 @@ class ChooseUsername extends Component {
       })
     }).then(response => response.json())
     .then(json => this.props.setUser(json))
-    .then(this.setState({
+    .then(response => this.setState({
       startLobby: true
     }))
   }
