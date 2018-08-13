@@ -1,19 +1,10 @@
-import React, { Fragment } from 'react';
-import { ActionCable } from 'react-actioncable-provider';
+//= require action_cable
+//= require_self
+//= require_tree ./channels
 
-const Cable = (props) => {
-  return (
-    <Fragment>
-      {props.users.map(user => {
-        return (
-          <ActionCable
-            channel={{ channel: 'LobbiesChannel', lobby_id: props.lobbyId }}
-            onReceived={props.handleReceivedUsers}
-          />
-        );
-      })}
-    </Fragment>
-  );
-};
+(function() {
+   this.App || (this.App = {});
 
-export default Cable;
+   App.cable = ActionCable.createConsumer();
+
+}).call(this);

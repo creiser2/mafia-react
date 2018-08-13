@@ -1,8 +1,13 @@
 import { connect } from 'react-redux';
 import React, { Component, Fragment } from 'react';
 
-import { USER_ROOT, HEADERS } from '../constants/api-endpoints'
+import { USER_ROOT, HEADERS, API_WS_ROOT } from '../constants/api-endpoints'
 import Lobby from './Lobby'
+import { ActionCableProvider, ActionCable } from 'react-actioncable-provider';
+// import { ActionCable } from 'actioncable'
+// import ActionCable from 'actioncable'
+// let cable = {}
+
 
 class ChooseUsername extends Component {
 
@@ -27,7 +32,7 @@ class ChooseUsername extends Component {
 
   renderSubmitButton = () => {
     if(this.state.usernameValue !== "") {
-      return <input type="submit" value="CREATE LOBBY" className='bg-hot-pink mafia-font white br10' onClick={this.handleSubmit}/>
+      return <input type="submit" value={this.props.hostOrJoin} className='bg-hot-pink mafia-font white br10' onClick={this.handleSubmit}/>
     }
   }
 
@@ -43,29 +48,20 @@ class ChooseUsername extends Component {
         username: this.state.usernameValue,
         lobby_id: this.props.lobbyId
       })
-    }).then(response => response.json()).then(json => this.setUser(json))
-
-    //for conditional rendering
-    this.setState({
+    }).then(response => response.json())
+    .then(json => this.props.setUser(json))
+    .then(this.setState({
       startLobby: true
-    })
-  }
-
-  //db response triggers redux
-  //set user object
-  //add yourself to total users array
-  setUser = (json) => {
-    this.props.setUser(json)
-    let updatedUsers = this.props.users
-    updatedUsers.push(json)
-    this.props.addUser(updatedUsers)
+    }))
   }
 
   render() {
     return(
       <Fragment>
         {this.state.startLobby ?
-            <Lobby />
+            <ActionCableProvider url={API_WS_ROOT}>
+              <Lobby />
+            </ActionCableProvider>
           :
           <div className = 'gutter mxa py1 blood-border abs fill ac'>
             <div className = 'bg-black blood-red f jcc'>

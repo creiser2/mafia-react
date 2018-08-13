@@ -23,6 +23,10 @@
   color: #FFF
 }
 
+.black {
+  color: #000
+}
+
 .bg-hot-pink {
   background-color: #FF4C74;
 }
@@ -33,6 +37,10 @@
 
 .bg-white {
   background-color: #FFF;
+}
+
+.bg-purple {
+  background-color: #5A2EFF;
 }
 
 .bg-blood-red {
@@ -121,4 +129,18 @@
 
 .big-question {
   font-size: 3em;
+}
+
+ol, ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.lobby-list {
+  max-width: 20em;
+  max-height: 76vh;
+  overflow: scroll;
+  margin: 1em auto;
 }

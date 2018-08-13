@@ -52,7 +52,7 @@ class HostLobby extends Component {
     return(
       <Fragment>
         {this.props.lobbyExists ?
-          <ChooseUsername />
+          <ChooseUsername hostOrJoin="CREATE"/>
           :
           <div className = 'gutter mxa py1 border abs fill ac mafia-dude'>
             <div className = 'bg-black hot-pink pl20 pr100'>

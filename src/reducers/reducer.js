@@ -15,7 +15,7 @@ export default function reducer(state = defaultState, action) {
       return {
         ...state, user: action.payload
       }
-    case "ADD_USER":
+    case "SET_USERS":
       return {
         ...state, users: action.payload
       }
