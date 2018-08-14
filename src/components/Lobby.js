@@ -22,12 +22,20 @@ class Lobby extends Component {
 
   //triggers where there is a change to the # of users
   updateUsers = (response) => {
+    const { type } = response
+    debugger;
     //update redux and display list of users
     // const cable = ActionCable.createConsumer()
-    if(response.startGame) {
-      this.handleGameStarted()
-    } else {
-      this.props.setUsers(response.users)
+    switch(type) {
+      case "CONNECT_USER":
+        this.props.setUsers(response.users)
+        break;
+      case "DC_USER":
+        this.props.setUsers(response.updated_users)
+        break;
+      case "START_GAME":
+        this.handleGameStarted()
+        break;
     }
   }
 
