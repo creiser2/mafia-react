@@ -40,7 +40,8 @@ class HostLobby extends Component {
       headers: HEADERS,
       body: JSON.stringify({
         name: lobbyName,
-        password: lobbyPassword
+        password: lobbyPassword,
+        protected: false
       })
     })
     .then(response => response.json())

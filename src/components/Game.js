@@ -1,19 +1,22 @@
 import React, { Component, Fragment } from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux';
-import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, DC_ROOT } from '../constants/api-endpoints'
+import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION } from '../constants/api-endpoints'
 
 import MafiaKill from './game/MafiaKill'
 import TownsfolkSleep from './game/TownsfolkSleep'
 
 class Game extends Component {
   state = {
-    openGame: false
+    openGame: false,
+    log: "",
   }
 
   componentDidMount = () => {
-
-    this.getRandomMafia()
+    //if the mafia does not exist, get one
+    if(!this.props.mafiaExists) {
+      this.getRandomMafia()
+    }
   }
 
   getRandomMafia = () => {
@@ -50,7 +53,7 @@ class Game extends Component {
   //all game updates come from here
   updateGame = response => {
     const { type } = response;
-    debugger;
+
     //all broadcasts must include a 'type'
     switch(type) {
       //in the case of mafia_selection, we are setting the mafia
@@ -61,6 +64,29 @@ class Game extends Component {
         this.setState({
           openGame: true
         })
+        //mafia now exists
+        this.props.setMafiaExists(true)
+        //unprotect lobby to handle disconnections
+        fetch(`${UPDATE_LOBBY_PROTECTION}` + this.props.lobbyId, {
+          method: 'PUT',
+          headers: HEADERS,
+          body: JSON.stringify({
+            id: this.props.lobbyId,
+            protected: false
+          })
+        })
+        break;
+      //user disconnects, handle this on front end
+      case "DC_USER":
+        this.props.setUsers(response.updated_users)
+        if(response.user.role === "mafia") {
+          window.close()
+        } else {
+          this.setState({
+            log: `${response.user.username} has disconnected.`
+          })
+        }
+        break;
     }
   }
 
@@ -88,6 +114,7 @@ class Game extends Component {
           }
           <ul className='bg-hot-pink m1 p1'>
           </ul>
+          <div>{this.state.log}</div>
         </div>
       </div>
     )
@@ -103,7 +130,8 @@ function msp(state) {
     users: state.users,
     user: state.user,
     isHost: state.isHost,
-    turn: state.turn
+    turn: state.turn,
+    mafiaExists: state.mafiaExists
   }
 }
 
@@ -126,6 +154,9 @@ function mdp(dispatch) {
     },
     setTurn: (type) => {
       dispatch({type: "SET_TURN", payload: type})
+    },
+    setMafiaExists: (bool) => {
+      dispatch({type: "MAFIA_EXISTS", payload: bool})
     }
   }
 }

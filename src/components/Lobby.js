@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { ActionCable } from 'react-actioncable-provider';
-import { API_ROOT, API_WS_ROOT, HEADERS, START_GAME, GET_LOBBY_USERS } from '../constants/api-endpoints';
+import { API_ROOT, API_WS_ROOT, HEADERS, START_GAME, GET_LOBBY_USERS, UPDATE_LOBBY_PROTECTION } from '../constants/api-endpoints';
 
 import Game from './Game'
 // import Cable from './Cable'
@@ -20,10 +20,24 @@ class Lobby extends Component {
     .then(json => this.props.setUsers(json.data.lobby.users))
   }
 
+  //protect the lobby when switching over from lobby cable to game cable
+  updateLobbyProtection = () => {
+    fetch(`${UPDATE_LOBBY_PROTECTION}` + this.props.lobbyId, {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify({
+        id: this.props.lobbyId,
+        protected: true
+      })
+    }).then(response => response.json())
+    .then(json => this.setState({
+      startGame: true
+    }))
+  }
+
   //triggers where there is a change to the # of users
   updateUsers = (response) => {
     const { type } = response
-    debugger;
     //update redux and display list of users
     // const cable = ActionCable.createConsumer()
     switch(type) {
@@ -52,9 +66,8 @@ class Lobby extends Component {
   }
 
   handleGameStarted = () => {
-    this.setState({
-      startGame: true
-    })
+    //protect the lobby so when switching cables, it doesn't think everyone disconnected
+    this.updateLobbyProtection()
   };
 
 
