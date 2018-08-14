@@ -6,7 +6,7 @@ import { API_ROOT, API_WS_ROOT, HEADERS, START_GAME, GET_LOBBY_USERS } from '../
 
 import Game from './Game'
 // import Cable from './Cable'
-
+import Horc from './horc'
 
 class Lobby extends Component {
 
@@ -49,6 +49,7 @@ class Lobby extends Component {
     })
   };
 
+
   //Start the game when host decides
   startGame = () => {
     fetch(START_GAME, {
@@ -61,10 +62,12 @@ class Lobby extends Component {
   }
 
   render() {
+    const LoadingGame = Horc(Game);
+
     return(
         <Fragment>
           {this.state.startGame ?
-            <Game />
+            <LoadingGame />
           :
           <div className = 'mxa py1 bg-black abs fill ac'>
           <div className = 'bg-hot-pink black f jcc'>

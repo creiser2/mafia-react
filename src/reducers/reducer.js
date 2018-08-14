@@ -6,7 +6,8 @@ const defaultState = {
   lobbyName: null,
   lobbyPassword: null,
   lobbyId: null,
-  isHost: false
+  isHost: false,
+  turn: "mafia"
 }
 
 
@@ -55,6 +56,14 @@ export default function reducer(state = defaultState, action) {
           ...state.user,
           role: action.payload
         }
+      }
+    case "SET_TURN":
+      return {
+        ...state, turn: action.payload
+      }
+    case "DECREMENT_ROUNDS":
+      return {
+        ...state, rounds: state.rounds-1
       }
     default:
       return state;
