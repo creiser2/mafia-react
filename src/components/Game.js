@@ -5,11 +5,16 @@ import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROT
 
 import MafiaKill from './game/MafiaKill'
 import TownsfolkSleep from './game/TownsfolkSleep'
+import TownsfolkTurn from './game/TownsfolkTurn'
+import Dead from './game/Dead'
+
+//rerender occurs on change of redux as user?
 
 class Game extends Component {
   state = {
     openGame: false,
     log: "",
+    alive: true
   }
 
   componentDidMount = () => {
@@ -54,6 +59,17 @@ class Game extends Component {
     })
   }
 
+  //Townsfolk & mafia votes are sent through here
+  submitVote = (event) => {
+    let voteUsername = event.target.innerText
+    let voteObj = this.props.users.filter(user => user.username === voteUsername)[0]
+    let voteId = voteObj.id
+
+    //this will broadcast out to all other voters
+    debugger;
+  }
+
+
   //this function updates the redux state of all players to exclude killed victim
   updateKilledVictim = (victim) => {
     victim.alive = false
@@ -66,7 +82,16 @@ class Game extends Component {
       }
     }
 
-    debugger;
+    //here we are going to need to update the redux of all users, to persist the kill
+    this.props.updateUsersAfterKill(updatedUsers)
+    //we also need to check if the passed in victim is the client, in that case we must update their state
+    if(victim.id === this.props.user.id) {
+      this.setState({
+        alive: false
+      })
+    }
+    //finally we must switch the turn to the townsfolk
+    this.props.setTurn('townsfolk')
   }
 
   //rendered when it is the MAFIA's turn
@@ -80,8 +105,28 @@ class Game extends Component {
     }
   }
 
+  //controls the logic of the game entirely
+  renderGame = () => {
+    //render alive components
+    if(this.state.alive) {
+      if(this.state.openGame || this.props.user.role === 'mafia') {
+        if(this.props.turn === 'mafia') {
+          return this.renderMafiaTurn()
+        } else {
+          return this.renderTownsfolkTurn()
+        }
+      } else {
+        //between the time we are selecting the mafia
+        return <div>Selecting Mafia</div>
+      }
+    } else {
+      //your dead render that
+      return <Dead />
+    }
+  }
+
   renderTownsfolkTurn = () => {
-    console.log("TOWNSFOLK TURN")
+    return <TownsfolkTurn vote={this.submitVote}/>
   }
 
   //all game updates come from here
@@ -100,15 +145,6 @@ class Game extends Component {
         })
         //mafia now exists
         this.props.setMafiaExists(true)
-        //unprotect lobby to handle disconnections
-        fetch(`${UPDATE_LOBBY_PROTECTION}` + this.props.lobbyId, {
-          method: 'PUT',
-          headers: HEADERS,
-          body: JSON.stringify({
-            id: this.props.lobbyId,
-            protected: false
-          })
-        })
         break;
 
       //mafia has selected someone to kill, update accordingly (this will also trigger a turn change)
@@ -141,16 +177,7 @@ class Game extends Component {
               onReceived={this.updateGame}
             />
           <div className='lobby-list bg-hot-pink'>
-          {this.state.openGame || this.props.user.role === 'mafia' ?
-            [
-              this.props.turn === 'mafia' ?
-                this.renderMafiaTurn()
-              :
-                this.renderTownsfolkTurn()
-            ]
-            :
-            <div>Selecting Mafia</div>
-          }
+          {this.renderGame()}
           <ul className='bg-hot-pink m1 p1'>
           </ul>
           <div>{this.state.log}</div>
@@ -196,6 +223,12 @@ function mdp(dispatch) {
     },
     setMafiaExists: (bool) => {
       dispatch({type: "MAFIA_EXISTS", payload: bool})
+    },
+    updateUsersAfterKill: (users) => {
+      dispatch({type: "KILL_VICTIM", payload: users})
+    },
+    userDied: () => {
+      dispatch({type: "USER_DIED"})
     }
   }
 }

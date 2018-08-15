@@ -72,8 +72,15 @@ export default function reducer(state = defaultState, action) {
       }
     case "KILL_VICTIM":
       return {
+        ...state, users: action.payload
+      }
+    case "USER_DIED":
+      return {
         ...state,
-        users: action.payload
+        user: {
+          ...state.user,
+          alive: false
+        }
       }
     default:
       return state;
