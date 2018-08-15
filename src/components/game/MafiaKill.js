@@ -18,8 +18,7 @@ class MafiaKill extends Component {
     return (
       <div className = 'mxa py1 bg-black abs fill ac'>
         <div className = 'bg-hot-pink black f jcc'>
-          <h2 className='mafia-font'>{this.props.username}</h2>
-          <h3 className='mafia-font'>Role: {this.props.user.role}</h3>
+          <h3 className='mafia-font'>MAFIA - ASSASSINATE SOMEONE</h3>
         </div>
         <div className='lobby-list bg-hot-pink'>
           <ul className='bg-hot-pink m1 p1'>

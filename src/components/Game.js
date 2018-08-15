@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux';
-import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION, KILL_VICTIM } from '../constants/api-endpoints'
+import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION, KILL_VICTIM, CAST_VOTE } from '../constants/api-endpoints'
 
 import MafiaKill from './game/MafiaKill'
 import TownsfolkSleep from './game/TownsfolkSleep'
@@ -60,13 +60,26 @@ class Game extends Component {
   }
 
   //Townsfolk & mafia votes are sent through here
-  submitVote = (event) => {
-    let voteUsername = event.target.innerText
-    let voteObj = this.props.users.filter(user => user.username === voteUsername)[0]
+  castVote = (event, incomingVoteUsername) => {
+    let voteObj = this.props.users.filter(user => user.username === incomingVoteUsername)[0]
     let voteId = voteObj.id
 
     //this will broadcast out to all other voters
-    debugger;
+    fetch(CAST_VOTE, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        lobby_id: this.props.lobbyId,
+        voter_id: this.props.user.id,
+        recipient_id: voteId
+      })
+    })
+
+  }
+
+  handleIncomingVote = (voter, recipient) => {
+    //send back the voter, and who they voted for
+    console.log(`${voter} thinks that ${recipient.username} is the mafia`)
   }
 
 
@@ -126,7 +139,7 @@ class Game extends Component {
   }
 
   renderTownsfolkTurn = () => {
-    return <TownsfolkTurn vote={this.submitVote}/>
+    return <TownsfolkTurn vote={this.castVote}/>
   }
 
   //all game updates come from here
@@ -161,6 +174,9 @@ class Game extends Component {
             log: `${response.user.username} has disconnected.`
           })
         }
+        break;
+      case "CAST_VOTE":
+        this.handleIncomingVote(response.voter_id, response.recipient)
         break;
     }
   }

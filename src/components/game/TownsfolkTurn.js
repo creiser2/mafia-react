@@ -40,8 +40,12 @@ class MafiaKill extends Component {
           <ul className='bg-hot-pink m1 p1'>
             {this.renderVoteOptions()}
           </ul>
-          
         </div>
+        {this.state.voteUsername !== "" ?
+          <button onClick={(event) => this.props.vote(event, this.state.voteUsername)}>CAST VOTE</button>
+        :
+          null
+        }
       </div>
     )
   }

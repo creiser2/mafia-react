@@ -9,6 +9,7 @@ export const UPDATE_USER_STATUS = 'http://localhost:3000/users/'
 export const PICK_MAFIA = 'http://localhost:3000/pickmafia'
 export const UPDATE_LOBBY_PROTECTION = 'http://localhost:3000/lobbies/'
 export const KILL_VICTIM = 'http://localhost:3000/killvictim'
+export const CAST_VOTE = 'http://localhost:3000/castvote'
 export const HEADERS = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
