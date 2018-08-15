@@ -70,6 +70,11 @@ export default function reducer(state = defaultState, action) {
       return {
         ...state, mafiaExists: action.payload
       }
+    case "KILL_VICTIM":
+      return {
+        ...state,
+        users: action.payload
+      }
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux';
-import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION } from '../constants/api-endpoints'
+import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION, KILL_VICTIM } from '../constants/api-endpoints'
 
 import MafiaKill from './game/MafiaKill'
 import TownsfolkSleep from './game/TownsfolkSleep'
@@ -35,11 +35,45 @@ class Game extends Component {
     }
   }
 
+  handleKillVictim = (event) => {
+    //grab victim's username
+    let victimUsername = event.target.innerText
+    //find victim obj and set his status to dead
+    let victimObj = this.props.users.filter(user => user.username === victimUsername)[0]
+    //get the ID and broadcast out the id of the victim that will be terminated
+    let victimId = victimObj.id
+
+    //this will broadcast out to all users the victim
+    fetch(KILL_VICTIM, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        lobby_id: this.props.lobbyId,
+        victim_id: victimId
+      })
+    })
+  }
+
+  //this function updates the redux state of all players to exclude killed victim
+  updateKilledVictim = (victim) => {
+    victim.alive = false
+    //for loop makes updatedList that replaces alive victim with dead victim
+    let updatedUsers = this.props.users
+    let i;
+    for(i = 0; i < updatedUsers.length; i++) {
+      if(updatedUsers[i].id === victim.id) {
+        updatedUsers[i] = victim
+      }
+    }
+
+    debugger;
+  }
+
   //rendered when it is the MAFIA's turn
   renderMafiaTurn = () => {
     //if you are the mafia, render mafia selection
     if(this.props.user.role === 'mafia') {
-      return <MafiaKill />
+      return <MafiaKill killVictim={this.handleKillVictim}/>
     //else, render sleep turn for townsfolk
     } else {
       return <TownsfolkSleep />
@@ -76,11 +110,16 @@ class Game extends Component {
           })
         })
         break;
+
+      //mafia has selected someone to kill, update accordingly (this will also trigger a turn change)
+      case "KILL":
+        this.updateKilledVictim(response.victim)
+        break;
       //user disconnects, handle this on front end
       case "DC_USER":
         this.props.setUsers(response.updated_users)
         if(response.user.role === "mafia") {
-          window.close()
+          // window.close()
         } else {
           this.setState({
             log: `${response.user.username} has disconnected.`

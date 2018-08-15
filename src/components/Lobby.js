@@ -6,7 +6,7 @@ import { API_ROOT, API_WS_ROOT, HEADERS, START_GAME, GET_LOBBY_USERS, UPDATE_LOB
 
 import Game from './Game'
 // import Cable from './Cable'
-import Horc from './horc'
+import Horc from './Horc'
 
 class Lobby extends Component {
 

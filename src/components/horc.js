@@ -9,6 +9,7 @@ function withWaiting(WrappedComponent) {
     }
 
     render() {
+      console.log("HORC")
       if (this.state.loading) {
         return <p>Loading</p>
       } else {
