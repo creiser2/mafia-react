@@ -167,22 +167,13 @@ class Game extends Component {
 
   render() {
     return(
-      <div className = 'mxa py1 bg-black abs fill ac'>
-        <div className = 'bg-hot-pink black f jcc'>
-          <h2 className='mafia-font'>{this.props.username}</h2>
-          <h3 className='mafia-font'>Role: {this.props.user.role}</h3>
-          </div>
-            <ActionCable
-              channel={{channel: 'LobbiesChannel', lobby_id: this.props.lobbyId, user_id: this.props.user.id}}
-              onReceived={this.updateGame}
-            />
-          <div className='lobby-list bg-hot-pink'>
-          {this.renderGame()}
-          <ul className='bg-hot-pink m1 p1'>
-          </ul>
-          <div>{this.state.log}</div>
-        </div>
-      </div>
+      <Fragment>
+        <ActionCable
+          channel={{channel: 'LobbiesChannel', lobby_id: this.props.lobbyId, user_id: this.props.user.id}}
+          onReceived={this.updateGame}
+        />
+        {this.renderGame()}
+      </Fragment>
     )
   }
 }

@@ -16,10 +16,16 @@ class MafiaKill extends Component {
 
   render() {
     return (
-      <div className='lobby-list bg-hot-pink'>
-        <ul className='bg-hot-pink m1 p1'>
-          {this.renderKillList()}
-        </ul>
+      <div className = 'mxa py1 bg-black abs fill ac'>
+        <div className = 'bg-hot-pink black f jcc'>
+          <h2 className='mafia-font'>{this.props.username}</h2>
+          <h3 className='mafia-font'>Role: {this.props.user.role}</h3>
+        </div>
+        <div className='lobby-list bg-hot-pink'>
+          <ul className='bg-hot-pink m1 p1'>
+            {this.renderKillList()}
+          </ul>
+        </div>
       </div>
     )
   }
