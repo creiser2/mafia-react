@@ -7,6 +7,7 @@ import MafiaKill from './game/MafiaKill'
 import TownsfolkSleep from './game/TownsfolkSleep'
 import TownsfolkTurn from './game/TownsfolkTurn'
 import Dead from './game/Dead'
+import WaitForVotes from './game/WaitForVotes'
 
 //rerender occurs on change of redux as user?
 
@@ -16,6 +17,7 @@ class Game extends Component {
     log: "",
     alive: true,
     voted: false,
+    voteCount: 0,
   }
 
   componentDidMount = () => {
@@ -94,21 +96,41 @@ class Game extends Component {
     let i=0;
 
     //function constructs voter object
-    if(updatedVotes.length > 0) {
-      for(i=0; i<updatedVotes.length; i++) {
+    if(this.props.votes.length > 0) {
+      for(i=0; i<this.props.votes.length; i++) {
         if(updatedVotes[i].recipientId === recipient.id) {
           updatedVotes[i].count += 1
-          break;
         } else if(i === updatedVotes.length-1) {
           updatedVotes.push({recipientId: recipient.id, recipientUsername: recipient.username, count: 1})
-          break;
         }
       }
     } else {
       updatedVotes.push({recipientId: recipient.id, recipientUsername: recipient.username, count: 1})
     }
-
     this.props.updateVotes(updatedVotes)
+
+    //increment total votes for round by 1
+    this.setState({
+      voteCount: this.state.voteCount + 1
+    })
+
+    //check to see if voting is over with
+    if(this.getAlivePlayers().length === this.state.voteCount) {
+      //reset all voting state and redux state
+      this.props.clearVotes()
+      this.props.setTurn('mafia')
+
+
+      this.setState({
+        voteCount: 0,
+        voted: false,
+      })
+
+    }
+  }
+
+  getAlivePlayers = () => {
+    return this.props.users.filter(user => user.alive)
   }
 
 
@@ -154,8 +176,12 @@ class Game extends Component {
       if(this.state.openGame || this.props.user.role === 'mafia') {
         if(this.props.turn === 'mafia') {
           return this.renderMafiaTurn()
-        } else {
+          //if tf turn and haven't voted
+        } else if(!this.state.voted) {
           return this.renderTownsfolkTurn()
+          //if tf turn and have voted (waiting)
+        } else {
+          return <WaitForVotes />
         }
       } else {
         //between the time we are selecting the mafia
@@ -269,6 +295,9 @@ function mdp(dispatch) {
     },
     updateVotes: (votes) => {
       dispatch({type: "CAST_VOTE", payload: votes})
+    },
+    clearVotes: () => {
+      dispatch({type: "CLEAR_VOTES"})
     }
   }
 }

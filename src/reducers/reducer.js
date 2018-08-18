@@ -87,6 +87,10 @@ export default function reducer(state = defaultState, action) {
       return {
         ...state, votes: action.payload
       }
+    case "CLEAR_VOTES":
+      return {
+        ...state, votes: []
+      }
     default:
       return state;
   }
