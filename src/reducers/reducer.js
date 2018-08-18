@@ -8,7 +8,8 @@ const defaultState = {
   lobbyId: null,
   isHost: false,
   mafiaExists: false,
-  turn: "mafia"
+  turn: "mafia",
+  votes: [],
 }
 
 
@@ -81,6 +82,10 @@ export default function reducer(state = defaultState, action) {
           ...state.user,
           alive: false
         }
+      }
+    case "CAST_VOTE":
+      return {
+        ...state, votes: action.payload
       }
     default:
       return state;

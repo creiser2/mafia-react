@@ -18,11 +18,23 @@ class MafiaKill extends Component {
     //filter out yourself, and dead victims
     let victims = this.props.users.filter(user => user.id !== this.props.user.id && user.alive)
 
+
     return victims.map(user => {
+
+      let userVotes = this.props.votes.find(vote => vote.recipientId === user.id)
+
+      if(userVotes === undefined) {
+        userVotes = {count: 0}
+      }
+
       if(user.username === this.state.voteUsername) {
-        return <li className="bg-black yellow mafia-font m1 s3" onClick={this.handleVote}>{user.username}</li>
+        return (
+          <li className="bg-black yellow mafia-font m1 s3" onClick={this.handleVote}>{`${user.username} votes: ${userVotes.count}`}</li>
+        )
       } else {
-        return <li className="bg-black white mafia-font m1 s3" onClick={this.handleVote}>{user.username}</li>
+        return (
+          <li className="bg-black white mafia-font m1 s3" onClick={this.handleVote}>{user.username}</li>
+        )
       }
     })
   }
@@ -56,7 +68,8 @@ function msp(state) {
     users: state.users,
     user: state.user,
     turn: state.turn,
-    lobbyId: state.lobbyId
+    lobbyId: state.lobbyId,
+    votes: state.votes
   }
 }
 

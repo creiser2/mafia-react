@@ -14,7 +14,8 @@ class Game extends Component {
   state = {
     openGame: false,
     log: "",
-    alive: true
+    alive: true,
+    voted: false,
   }
 
   componentDidMount = () => {
@@ -75,11 +76,39 @@ class Game extends Component {
       })
     })
 
+    //LEFTOFF dont render townsfolk pg at this pt
+    this.setState({
+      voted: true
+    })
   }
 
-  handleIncomingVote = (voter, recipient) => {
-    //send back the voter, and who they voted for
-    console.log(`${voter} thinks that ${recipient.username} is the mafia`)
+  handleIncomingVote = (voterId, recipient) => {
+    //maybe do something with voter ID later, but
+    //vote structure will be like {recipient.username: VOTE_COUNT}
+    let voter = this.props.users.find(user => user.id == voterId)
+    let voterUsername = voter.username
+    let updatedVotes = this.props.votes
+    let voteObj = {recipientId: recipient.id, recipientUsername: recipient.username, count: count}
+
+    let count = 0;
+    let i=0;
+
+    //function constructs voter object
+    if(updatedVotes.length > 0) {
+      for(i=0; i<updatedVotes.length; i++) {
+        if(updatedVotes[i].recipientId === recipient.id) {
+          updatedVotes[i].count += 1
+          break;
+        } else if(i === updatedVotes.length-1) {
+          updatedVotes.push({recipientId: recipient.id, recipientUsername: recipient.username, count: 1})
+          break;
+        }
+      }
+    } else {
+      updatedVotes.push({recipientId: recipient.id, recipientUsername: recipient.username, count: 1})
+    }
+
+    this.props.updateVotes(updatedVotes)
   }
 
 
@@ -139,7 +168,7 @@ class Game extends Component {
   }
 
   renderTownsfolkTurn = () => {
-    return <TownsfolkTurn vote={this.castVote}/>
+    return <TownsfolkTurn vote={this.castVote} votes={this.state.votes}/>
   }
 
   //all game updates come from here
@@ -204,7 +233,8 @@ function msp(state) {
     user: state.user,
     isHost: state.isHost,
     turn: state.turn,
-    mafiaExists: state.mafiaExists
+    mafiaExists: state.mafiaExists,
+    votes: state.votes
   }
 }
 
@@ -236,6 +266,9 @@ function mdp(dispatch) {
     },
     userDied: () => {
       dispatch({type: "USER_DIED"})
+    },
+    updateVotes: (votes) => {
+      dispatch({type: "CAST_VOTE", payload: votes})
     }
   }
 }
