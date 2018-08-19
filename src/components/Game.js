@@ -57,7 +57,8 @@ class Game extends Component {
       headers: HEADERS,
       body: JSON.stringify({
         lobby_id: this.props.lobbyId,
-        victim_id: victimId
+        victim_id: victimId,
+        turn: 'townsfolk'
       })
     })
   }
@@ -100,8 +101,10 @@ class Game extends Component {
       for(i=0; i<this.props.votes.length; i++) {
         if(updatedVotes[i].recipientId === recipient.id) {
           updatedVotes[i].count += 1
+          break;
         } else if(i === updatedVotes.length-1) {
           updatedVotes.push({recipientId: recipient.id, recipientUsername: recipient.username, count: 1})
+          break;
         }
       }
     } else {
@@ -116,26 +119,89 @@ class Game extends Component {
 
     //check to see if voting is over with
     if(this.getAlivePlayers().length === this.state.voteCount) {
-      //reset all voting state and redux state
+      //kill the suspect who was most voted for
+      this.killSuspect()
+    }
+  }
+
+  //get a list of players who's alive boolean is true
+  getAlivePlayers = () => {
+    return this.props.users.filter(user => user.alive)
+  }
+
+  //tally votes and decide who the townsfolk want to eliminate
+  killSuspect = () => {
+    //tied detects if there is a tie in the votes
+    let popularVote = this.findPopularVote()
+    let votes = this.props.votes
+
+    //check to see if there's a tie
+    let u=0;
+    for(u=0; u<votes.length; u++) {
+      if(votes[u].count === popularVote.vote.count && votes[u] !== popularVote.vote) {
+        popularVote.tied = true
+      }
+    }
+
+    //if there's a tie, townsfolk can't kill anyone
+    if(popularVote.tied) {
+      console.log("TIE")
       this.props.clearVotes()
       this.props.setTurn('mafia')
-
 
       this.setState({
         voteCount: 0,
         voted: false,
       })
+      //only mafia will broadcast kill bc they must be living at this point
+    } else if(this.props.user.role === 'mafia') {
+      //this will broadcast out to all users the victim
+      fetch(KILL_VICTIM, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify({
+          lobby_id: this.props.lobbyId,
+          victim_id: popularVote.vote.recipientId,
+          turn: 'mafia'
+        })
+      }).then(response => {
+        this.props.clearVotes()
 
+        this.setState({
+          voteCount: 0,
+          voted: false,
+        })
+      })
+    }
+    else {
+      this.props.clearVotes()
+      this.props.setTurn('mafia')
+
+      this.setState({
+        voteCount: 0,
+        voted: false,
+      })
     }
   }
 
-  getAlivePlayers = () => {
-    return this.props.users.filter(user => user.alive)
+  //iterate through list and find most popular vote
+  findPopularVote = () => {
+    let popularVote = {vote: this.props.votes[0], tied: false}
+    let votes = this.props.votes
+
+    //pick out the most popular vote
+    let i=0;
+    for(i=0; i<votes.length; i++) {
+      if(votes[i].count > popularVote.vote.count) {
+        popularVote.vote = votes[i]
+      }
+    }
+
+    return popularVote
   }
 
-
   //this function updates the redux state of all players to exclude killed victim
-  updateKilledVictim = (victim) => {
+  updateKilledVictim = (victim, incomingTurn) => {
     victim.alive = false
     //for loop makes updatedList that replaces alive victim with dead victim
     let updatedUsers = this.props.users
@@ -154,15 +220,16 @@ class Game extends Component {
         alive: false
       })
     }
+    console.log(incomingTurn)
     //finally we must switch the turn to the townsfolk
-    this.props.setTurn('townsfolk')
+    this.props.setTurn(incomingTurn)
   }
 
   //rendered when it is the MAFIA's turn
   renderMafiaTurn = () => {
     //if you are the mafia, render mafia selection
     if(this.props.user.role === 'mafia') {
-      return <MafiaKill killVictim={this.handleKillVictim}/>
+      return <MafiaKill killVictim={this.handleKillVictim} alivePlayers={this.getAlivePlayers()}/>
     //else, render sleep turn for townsfolk
     } else {
       return <TownsfolkSleep />
@@ -217,7 +284,8 @@ class Game extends Component {
 
       //mafia has selected someone to kill, update accordingly (this will also trigger a turn change)
       case "KILL":
-        this.updateKilledVictim(response.victim)
+        debugger;
+        this.updateKilledVictim(response.victim, response.turn)
         break;
       //user disconnects, handle this on front end
       case "DC_USER":

@@ -6,7 +6,7 @@ class MafiaKill extends Component {
 
   renderKillList = () => {
     //filter out yourself, and dead victims
-    let victims = this.props.users.filter(user => user.id !== this.props.user.id && user.role !== 'dead')
+    let victims = this.props.alivePlayers.filter(user => user.id !== this.props.user.id)
 
 
     return victims.map(user => {
