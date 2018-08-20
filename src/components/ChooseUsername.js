@@ -62,7 +62,7 @@ class ChooseUsername extends Component {
           :
           <div className = 'gutter mxa py1 blood-border abs fill ac'>
             <div className = 'bg-black blood-red f jcc'>
-              <h2 className='mafia-font'>WHAT'S YOUR NAME?</h2>
+              <h2 className=''>WHAT'S YOUR NAME?</h2>
             </div>
             <p className='mafia-font'>Lobby Name: {this.props.lobbyName}</p>
             <p className='mafia-font'>Lobby Password: {this.props.lobbyPassword}</p>

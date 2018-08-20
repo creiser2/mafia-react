@@ -63,7 +63,7 @@ class HostLobby extends Component {
       this.setState({
         errorChanged: false
       })
-    }, 2000)
+    }, 3000)
   }
 
   //quick flash render for message

@@ -10,6 +10,24 @@
 @import './lib/typography.css';
 @import './lib/z-index.css';
 
+@font-face {
+  font-family: 'LemonMilk';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('LemonMilk'),
+    url(./fonts/LemonMilk.otf) format('otf');
+}
+
+/* @font-face {
+  font-family: 'LemonMilk';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('LemonMilkbold'),
+    url(./fonts/LemonMilkbold.otf) format('otf');
+} */
+
 
 .hot-pink {
   color: #FF4C74;
@@ -77,12 +95,16 @@
 
 .mafia-button {
   background-color: #FF4C74;
-  font-family: 'Faster One';
+  font-family: 'LemonMilk';
   color: #FFF;
 }
 
 .mafia-font {
-  font-family: 'Faster One';
+  font-family: 'LemonMilk';
+}
+
+.user-font {
+  font-family: 'LemonMilk', monospace;
 }
 
 .knife {

@@ -9,7 +9,7 @@ const Homepage = (props) => {
         <h2 className='mafia-font'>MAFIA</h2>
       </div>
       <div className = "p1 bg-black hot-pink mb2 bottom rel mxa mw-10 br10 top-600">
-        <button className='s4 mafia-font bg-black hot-pink' onClick={props.joinLobbyClick}>JOIN LOBBY</button>
+        <button className='s4 user-font bg-black hot-pink' onClick={props.joinLobbyClick}>JOIN LOBBY</button>
         <button className='s4 mafia-font bg-black hot-pink' onClick={props.hostLobbyClick}>HOST LOBBY</button>
       </div>
     </div>

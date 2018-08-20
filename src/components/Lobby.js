@@ -92,7 +92,7 @@ class Lobby extends Component {
           :
           <div className = 'mxa py1 bg-black abs fill ac'>
           <div className = 'bg-hot-pink black f jcc'>
-            <h2 className='mafia-font'>{this.props.lobbyName}</h2>
+            <h2 className='user-font'>{this.props.lobbyName}</h2>
             </div>
             <div className='lobby-list bg-hot-pink'>
             <ul className='bg-hot-pink m1 p1'>
