@@ -22,15 +22,19 @@ class SpecialForm extends Component {
   }
 
   handleNameChange = (event) => {
+    let lowerCasedName = event.target.value.toLowerCase()
     this.setState({
-      nameValue: event.target.value
+      nameValue: lowerCasedName
     })
+    console.log(this.state.nameValue)
   }
 
   handlePasswordChange = (event) => {
+    let lowerCasedPassword = event.target.value.toLowerCase()
     this.setState({
-      passwordValue: event.target.value
+      passwordValue: lowerCasedPassword
     })
+    console.log(this.state.passwordValue)
   }
 
   renderSubmitButton = () => {
@@ -43,14 +47,14 @@ class SpecialForm extends Component {
     return(
       <Fragment>
       {this.state.enterLobbyName ?
-          <input type="text" value={this.state.nameValue} onChange={this.handleNameChange} className='bg-black hot-pink mafia-font'/>
+          <input type="text" value={this.state.nameValue} onChange={this.handleNameChange} className='bg-black hot-pink-button mafia-font'/>
           :
-          <button className='s4 mafia-font bg-black hot-pink' onClick={this.handleLobbyNameClick}>LOBBY NAME</button>
+          <button className='s4 mafia-font bg-black hot-pink-button' onClick={this.handleLobbyNameClick}>LOBBY NAME</button>
         }
         {this.state.enterLobbyPassword ?
-          <input type="text" value={this.state.passwordValue} onChange={this.handlePasswordChange} className='bg-black hot-pink mafia-font'/>
+          <input type="text" value={this.state.passwordValue} onChange={this.handlePasswordChange} className='bg-black hot-pink-button mafia-font'/>
           :
-          <button className='s4 mafia-font bg-black hot-pink' onClick={this.handleLobbyPasswordClick}>LOBBY PASSWORD</button>
+          <button className='s4 mafia-font bg-black hot-pink-button' onClick={this.handleLobbyPasswordClick}>LOBBY PASSWORD</button>
         }
       {this.renderSubmitButton()}
       </Fragment>
