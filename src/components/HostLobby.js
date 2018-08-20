@@ -8,6 +8,10 @@ import ChooseUsername from './ChooseUsername'
 
 
 class HostLobby extends Component {
+  state = {
+    errorLog: "",
+    errorChanged: false
+  }
 
   handleNamePasswordSubmit = (event, lobbyName, lobbyPassword) => {
     fetch(API_AVAIL, {
@@ -29,7 +33,12 @@ class HostLobby extends Component {
       this.createLobby(lobbyName, lobbyPassword)
     } else {
       //handle error where lobby name is taken
-
+      this.setState({
+        errorLog: "Lobby Name is Taken",
+        errorChanged: true
+      })
+      //flash message disappears after 2 seconds
+      this.messageFlash()
     }
   }
 
@@ -49,6 +58,24 @@ class HostLobby extends Component {
     .then(this.props.setHost())
   }
 
+  messageFlash = () => {
+    setTimeout(() => {
+      this.setState({
+        errorChanged: false
+      })
+    }, 2000)
+  }
+
+  //quick flash render for message
+  renderErrorMessage = () => {
+    if(this.state.errorChanged) {
+      return (
+        <div className="bg-blood-red white mt40 b br20 mr10 ml10">{this.state.errorLog}</div>
+      )
+    } else {
+      return null
+    }
+  }
 
   render() {
     return(
@@ -64,6 +91,7 @@ class HostLobby extends Component {
             <div className = "p1 bg-black hot-pink mb2 bottom rel mxa mw-10 br10 top-600">
               <SpecialForm handleSubmit={this.handleNamePasswordSubmit} hostOrJoin="HOST"/>
             </div>
+            {this.renderErrorMessage()}
           </div>
         }
       </Fragment>

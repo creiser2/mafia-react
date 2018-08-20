@@ -7,6 +7,10 @@ import { API_AVAIL, HEADERS, JOIN_LOBBY } from '../constants/api-endpoints'
 import ChooseUsername from './ChooseUsername'
 
 class JoinLobby extends Component {
+  state = {
+    errorLog: "",
+    errorChanged: false
+  }
 
   //check to see if the lobby name exists
   handleNamePasswordSubmit = (event, lobbyName, lobbyPassword) => {
@@ -37,6 +41,12 @@ class JoinLobby extends Component {
       .then(json => this.updateLobbyRedux(json, lobbyName, lobbyPassword))
     } else {
       //lobby name does not exist!
+      this.setState({
+        errorLog: "Lobby Does Not Exist",
+        errorChanged: true
+      })
+      //flash message disappears after 2 seconds
+      this.messageFlash()
     }
   }
 
@@ -49,6 +59,30 @@ class JoinLobby extends Component {
       this.props.openLobby()
     } else {
       //Password Wrong!
+      this.setState({
+        errorLog: "Incorrect Password",
+        errorChanged: true
+      })
+      this.messageFlash()
+    }
+  }
+
+  messageFlash = () => {
+    setTimeout(() => {
+      this.setState({
+        errorChanged: false
+      })
+    }, 2000)
+  }
+
+  //quick flash render for message
+  renderErrorMessage = () => {
+    if(this.state.errorChanged) {
+      return (
+        <div className="bg-blood-red white mt40 b br20 mr10 ml10">{this.state.errorLog}</div>
+      )
+    } else {
+      return null
     }
   }
 
@@ -66,6 +100,7 @@ class JoinLobby extends Component {
             <div className = "p1 bg-black hot-pink mb2 bottom rel mxa mw-10 br10 top-600">
               <SpecialForm handleSubmit={this.handleNamePasswordSubmit} hostOrJoin="JOIN"/>
             </div>
+            {this.renderErrorMessage()}
           </div>
         }
       </Fragment>
