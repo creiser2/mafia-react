@@ -30,6 +30,7 @@
 
 .hot-pink-button:hover {
   color: yellow;
+  transition: .2s;
 }
 
 .blood-red {
@@ -65,7 +66,8 @@
 }
 
 .bg-purple:hover {
-  color: yellow;
+  color: #a50b0b;
+  text-decoration: line-through;
   transition: .2s;
 }
 

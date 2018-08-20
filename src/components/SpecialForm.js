@@ -26,7 +26,6 @@ class SpecialForm extends Component {
     this.setState({
       nameValue: lowerCasedName
     })
-    console.log(this.state.nameValue)
   }
 
   handlePasswordChange = (event) => {
@@ -34,7 +33,6 @@ class SpecialForm extends Component {
     this.setState({
       passwordValue: lowerCasedPassword
     })
-    console.log(this.state.passwordValue)
   }
 
   renderSubmitButton = () => {

@@ -22,8 +22,9 @@ class ChooseUsername extends Component {
   }
 
   handleUsernameChange = (event) => {
+    let upperCasedUsername = event.target.value.toUpperCase()
     this.setState({
-      usernameValue: event.target.value
+      usernameValue: upperCasedUsername
     })
   }
 
