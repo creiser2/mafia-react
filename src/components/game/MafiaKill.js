@@ -10,7 +10,7 @@ class MafiaKill extends Component {
 
 
     return victims.map(user => {
-      return <li className="bg-purple white mafia-font m1 s3" onClick={this.props.killVictim}>{user.username}</li>
+      return <li className="bg-purple white mafia-font m1 s3 br10" onClick={this.props.killVictim}>{user.username}</li>
     })
   }
 

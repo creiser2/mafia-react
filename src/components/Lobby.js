@@ -55,7 +55,7 @@ class Lobby extends Component {
 
   renderUsersList = () => {
     return this.props.users.map(user => {
-      return <li className="bg-purple white mafia-font m1 s3">{user.username}</li>
+      return <li className="bg-purple white mafia-font m1 s3 br10">{user.username}</li>
     })
   }
 

@@ -29,11 +29,11 @@ class MafiaKill extends Component {
 
       if(user.username === this.state.voteUsername) {
         return (
-          <li className="bg-black yellow mafia-font m1 s3" onClick={this.handleVote}>{`${user.username} votes: ${userVotes.count}`}</li>
+          <li className="bg-black yellow mafia-font m1 s3 br10" onClick={this.handleVote}>{`${user.username} votes: ${userVotes.count}`}</li>
         )
       } else {
         return (
-          <li className="bg-black white mafia-font m1 s3" onClick={this.handleVote}>{user.username}</li>
+          <li className="bg-black white mafia-font m1 s3 br10" onClick={this.handleVote}>{user.username}</li>
         )
       }
     })

@@ -19,18 +19,17 @@
     url(./fonts/LemonMilk.otf) format('otf');
 }
 
-/* @font-face {
-  font-family: 'LemonMilk';
-  font-style: normal;
-  font-weight: 700;
-  src:
-    local('LemonMilkbold'),
-    url(./fonts/LemonMilkbold.otf) format('otf');
-} */
-
 
 .hot-pink {
   color: #FF4C74;
+}
+
+.hot-pink-button {
+  color: #FF4C74;
+}
+
+.hot-pink-button:hover {
+  color: yellow;
 }
 
 .blood-red {
@@ -63,6 +62,11 @@
 
 .bg-purple {
   background-color: #5A2EFF;
+}
+
+.bg-purple:hover {
+  color: yellow;
+  transition: .2s;
 }
 
 .bg-blood-red {
