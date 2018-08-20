@@ -3,13 +3,18 @@ import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux';
 import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION, KILL_VICTIM, CAST_VOTE } from '../constants/api-endpoints'
 
+//components
 import MafiaKill from './game/MafiaKill'
 import TownsfolkSleep from './game/TownsfolkSleep'
 import TownsfolkTurn from './game/TownsfolkTurn'
 import Dead from './game/Dead'
 import WaitForVotes from './game/WaitForVotes'
+import TownsfolkWin from './game/TownsfolkWin'
+import TownsfolkLose from './game/TownsfolkLose'
+import MafiaLose from './game/MafiaLose'
+import MafiaWin from './game/MafiaWin'
+import SelectingMafia from './game/SelectingMafia'
 
-//rerender occurs on change of redux as user?
 
 class Game extends Component {
   state = {
@@ -18,6 +23,8 @@ class Game extends Component {
     alive: true,
     voted: false,
     voteCount: 0,
+    mafiaDead: false,
+    mafiaWon: false
   }
 
   componentDidMount = () => {
@@ -43,6 +50,7 @@ class Game extends Component {
     }
   }
 
+  //called when mafioso selects who to kill
   handleKillVictim = (event) => {
     //grab victim's username
     let victimUsername = event.target.innerText
@@ -200,9 +208,23 @@ class Game extends Component {
     return popularVote
   }
 
+  //if the victim is the mafia, set state accordingly
+  checkVictimMafia = (victim) => {
+    //townsfolk successfully kill mafia
+    if(victim.role === 'mafia') {
+      this.setState({
+        mafiaDead: true
+      })
+    }
+  }
+
   //this function updates the redux state of all players to exclude killed victim
   updateKilledVictim = (victim, incomingTurn) => {
     victim.alive = false
+
+    //checks to see if mafia is dead
+    this.checkVictimMafia(victim)
+
     //for loop makes updatedList that replaces alive victim with dead victim
     let updatedUsers = this.props.users
     let i;
@@ -220,7 +242,10 @@ class Game extends Component {
         alive: false
       })
     }
-    console.log(incomingTurn)
+
+    //checks to see if mafia has won
+    this.checkMafiaWin()
+
     //finally we must switch the turn to the townsfolk
     this.props.setTurn(incomingTurn)
   }
@@ -236,29 +261,56 @@ class Game extends Component {
     }
   }
 
-  //controls the logic of the game entirely
-  renderGame = () => {
-    //render alive components
-    if(this.state.alive) {
-      if(this.state.openGame || this.props.user.role === 'mafia') {
-        if(this.props.turn === 'mafia') {
-          return this.renderMafiaTurn()
-          //if tf turn and haven't voted
-        } else if(!this.state.voted) {
-          return this.renderTownsfolkTurn()
-          //if tf turn and have voted (waiting)
-        } else {
-          return <WaitForVotes />
-        }
-      } else {
-        //between the time we are selecting the mafia
-        return <div>Selecting Mafia</div>
-      }
-    } else {
-      //your dead render that
-      return <Dead />
+  //basically the mafia wins when there are only 2 people left because he can kill the last person
+  checkMafiaWin = () => {
+    if(this.getAlivePlayers().length <= 2) {
+      this.setState({
+        mafiaWon: true
+      })
     }
   }
+
+  //controls the logic of the game entirely
+  renderGame = () => {
+    //render game components
+    if(!this.state.mafiaDead) {
+      if(!this.state.mafiaWon) {
+        if(this.state.alive) {
+          if(this.state.openGame || this.props.user.role === 'mafia') {
+            if(this.props.turn === 'mafia') {
+              return this.renderMafiaTurn()
+              //if tf turn and haven't voted
+            } else if(!this.state.voted) {
+              return this.renderTownsfolkTurn()
+              //if tf turn and have voted (waiting)
+            } else {
+              return <WaitForVotes />
+            }
+          } else {
+            //between the time we are selecting the mafia
+            return <SelectingMafia />
+          }
+        } else {
+          //your dead render that
+          return <Dead />
+        } //mafia has won
+      } else {
+        if(this.props.user.role !== 'mafia') {
+          return <TownsfolkLose />
+        } else {
+          return <MafiaWin />
+        }
+      }
+    } else {
+      //mafia is dead
+      if(this.props.user.role !== 'mafia') {
+        return <TownsfolkWin />
+      } else {
+        return <MafiaLose />
+      }
+    }
+  }
+
 
   renderTownsfolkTurn = () => {
     return <TownsfolkTurn vote={this.castVote} votes={this.state.votes}/>
@@ -284,7 +336,6 @@ class Game extends Component {
 
       //mafia has selected someone to kill, update accordingly (this will also trigger a turn change)
       case "KILL":
-        debugger;
         this.updateKilledVictim(response.victim, response.turn)
         break;
       //user disconnects, handle this on front end
