@@ -24,7 +24,7 @@ class Game extends Component {
     voted: false,
     voteCount: 0,
     mafiaDead: false,
-    mafiaWon: false
+    mafiaWon: false,
   }
 
   componentDidMount = () => {
@@ -296,6 +296,7 @@ class Game extends Component {
         } //mafia has won
       } else {
         if(this.props.user.role !== 'mafia') {
+          //set state to game over
           return <TownsfolkLose />
         } else {
           return <MafiaWin />
