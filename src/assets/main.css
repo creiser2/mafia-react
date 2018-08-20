@@ -42,11 +42,11 @@
 }
 
 .yellow {
-  color: #FFFD54
+  color: #FFFD54;
 }
 
 .black {
-  color: #000
+  color: #000;
 }
 
 .bg-hot-pink {
@@ -65,7 +65,11 @@
   background-color: #5A2EFF;
 }
 
-.bg-purple:hover {
+.bg-purple-murder {
+  background-color: #5A2EFF;
+}
+
+.bg-purple-murder:hover {
   color: #a50b0b;
   text-decoration: line-through;
   transition: .2s;

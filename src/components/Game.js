@@ -312,6 +312,18 @@ class Game extends Component {
     }
   }
 
+  //unprotect the lobby
+  updateLobbyProtection = () => {
+    fetch(`${UPDATE_LOBBY_PROTECTION}` + this.props.lobbyId, {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify({
+        id: this.props.lobbyId,
+        protected: false
+      })
+    })
+  }
+
 
   renderTownsfolkTurn = () => {
     return <TownsfolkTurn vote={this.castVote} votes={this.state.votes}/>
@@ -327,12 +339,15 @@ class Game extends Component {
       case "mafia_selection":
         if(response.mafia.username === this.props.user.username) {
           this.props.setRole("mafia")
+          //allow disconnections in lobby to exist
+          this.updateLobbyProtection()
         }
         this.setState({
           openGame: true
         })
         //mafia now exists
         this.props.setMafiaExists(true)
+
         break;
 
       //mafia has selected someone to kill, update accordingly (this will also trigger a turn change)
