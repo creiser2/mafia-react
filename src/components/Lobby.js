@@ -88,7 +88,7 @@ class Lobby extends Component {
     return(
         <Fragment>
           {this.state.startGame ?
-            <LoadingGame />
+            <LoadingGame username={this.props.username}/>
           :
           <div className = 'mxa py1 bg-black abs fill ac'>
           <div className = 'bg-hot-pink black f jcc'>

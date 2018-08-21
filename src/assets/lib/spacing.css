@@ -19,7 +19,9 @@
 .mb05, .my05, .m05 { margin-bottom: 0.5em }
 .ml05, .mx05, .m05 { margin-left: 0.5em }
 .mr05, .mx05, .m05 { margin-right: 0.5em }
+.mr4 { margin-right: 4em }
 .mr10 { margin-right: 10em }
+.mr12 { margin-right: 12em }
 .pt05, .py05, .p05 { padding-top: 0.5em }
 .pb05, .py05, .p05 { padding-bottom: 0.5em }
 .pl05, .px05, .p05 { padding-left: 0.5em }
@@ -28,7 +30,9 @@
 .mt075, .my075, .m075 { margin-top: 0.75em }
 .mb075, .my075, .m075 { margin-bottom: 0.75em }
 .ml075, .mx075, .m075 { margin-left: 0.75em }
+.ml4 { margin-left: 4em }
 .ml10 { margin-left: 10em }
+.ml12 { margin-left: 12em }
 .mr075, .mx075, .m075 { margin-right: 0.75em }
 .pt075, .py075, .p075 { padding-top: 0.75em }
 .pb075, .py075, .p075 { padding-bottom: 0.75em }
@@ -50,3 +54,4 @@
 .mt40 { margin-top: 40em }
 .br20 { border-radius: 20px }
 .br10 { border-radius: 0.625em }
+.br3 { border-radius: 0.333em }

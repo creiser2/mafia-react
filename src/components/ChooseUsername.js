@@ -61,15 +61,16 @@ class ChooseUsername extends Component {
               <Lobby />
             </ActionCableProvider>
           :
-          <div className = 'gutter mxa py1 blood-border abs fill ac'>
+          <div className = 'gutter mxa py1 blood-border abs fill ac spy'>
             <div className = 'bg-black blood-red f jcc'>
               <h2 className=''>WHAT'S YOUR NAME?</h2>
             </div>
-            <p className='mafia-font'>Lobby Name: {this.props.lobbyName}</p>
-            <p className='mafia-font'>Lobby Password: {this.props.lobbyPassword}</p>
-
+            <div className='br3 mr4 ml4 bg-black blood-red'>
+              <p className='mafia-font'>Lobby Name: {this.props.lobbyName}</p>
+              <p className='mafia-font'>Lobby Password: {this.props.lobbyPassword}</p>
+            </div>
             <div className='f x y jcc aic'>
-              <div className='name-box fa bg-black'>
+              <div className='name-box fa bg-black mb6 ml12 mr12'>
                 {this.state.clickedQuestion ?
                   <input type="text" value={this.state.usernameValue} onChange={this.handleUsernameChange} className='bg-white blood-red mafia-font' />
                   :

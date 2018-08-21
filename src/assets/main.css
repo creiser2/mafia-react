@@ -37,6 +37,10 @@
   color: #a50b0b;
 }
 
+.money-green {
+  color: #009942;
+}
+
 .white {
   color: #FFF
 }
@@ -51,6 +55,10 @@
 
 .bg-hot-pink {
   background-color: #FF4C74;
+}
+
+.bg-money-green {
+  background-color: #009942;
 }
 
 .bg-black {
@@ -139,8 +147,20 @@
   background-repeat: none;
 }
 
+.money-bags {
+  background: url("/money-bags.jpg");
+  background-size: cover;
+  background-repeat: none;
+}
+
 .spy {
   background: url("/spy.jpg");
+  background-size: cover;
+  background-repeat: none;
+}
+
+.detective {
+  background: url("/detective.jpg");
   background-size: cover;
   background-repeat: none;
 }
@@ -158,8 +178,9 @@
   border: 5px solid #000;
   height: 10em;
   width: 30px;
-  margin-right: 10em;
-  margin-left: 10em;
+  margin-right: 12em;
+  margin-left: 12em;
+  margin-bottom: 6em;
   border-radius: 0.333em;
   color: #FFF;
   padding-top: 3em;
@@ -175,6 +196,11 @@
 
 .big-question {
   font-size: 3em;
+}
+
+.big-question:hover {
+  color: yellow;
+  transition: .2s;
 }
 
 ol, ul {
