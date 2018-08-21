@@ -7,11 +7,13 @@ import { API_ROOT, API_WS_ROOT, HEADERS, START_GAME, GET_LOBBY_USERS, UPDATE_LOB
 import Game from './Game'
 // import Cable from './Cable'
 import Horc from './Horc'
+import Emoji from './Emoji'
 
 class Lobby extends Component {
 
   state = {
-    startGame: false
+    startGame: false,
+    startGameEmoji: "",
   }
 
   componentDidMount = () => {
@@ -61,8 +63,23 @@ class Lobby extends Component {
 
   renderStartGameButton = () => {
     if(this.props.isHost) {
-      return <button className='mafia-button back-button' onClick={this.startGame}>Start Game</button>
+      return (
+          <button className='mafia-button start-game-button' onClick={this.startGame} onMouseEnter={this.startGameHoverOn} onMouseLeave={this.startGameHoverOff}>START GAME {this.state.startGameEmoji}</button>
+      )
     }
+  }
+
+  startGameHoverOn = () => {
+    let checkMark = <Emoji symbol="✅" label="check"/>
+    this.setState({
+      startGameEmoji: checkMark
+    })
+  }
+
+  startGameHoverOff = () => {
+    this.setState({
+      startGameEmoji: ""
+    })
   }
 
   handleGameStarted = () => {

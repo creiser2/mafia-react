@@ -1,16 +1,37 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-
+import Emoji from '../Emoji'
 
 class MafiaKill extends Component {
+
+  state = {
+    hoveredOn: ''
+  }
 
   renderKillList = () => {
     //filter out yourself, and dead victims
     let victims = this.props.alivePlayers.filter(user => user.id !== this.props.user.id)
 
-
     return victims.map(user => {
-      return <li className="bg-purple-murder white mafia-font m1 s3 br10" onClick={this.props.killVictim}>{user.username}</li>
+      if(user.username === this.state.hoveredOn) {
+        return <li className="bg-purple-murder white mafia-font m1 s3 br10" onClick={this.props.killVictim} onMouseEnter={this.killHoverOn} onMouseLeave={this.killHoverOff} id={user.username}>{<Emoji symbol="⚔️" label="cross_swords" id={user.username}/>}{user.username}{<Emoji symbol="⚔️" label="cross_swords" id={user.username}/>}</li>
+      } else {
+        return <li className="bg-purple-murder white mafia-font m1 s3 br10" onClick={this.props.killVictim} onMouseEnter={this.killHoverOn} onMouseLeave={this.killHoverOff} id={user.username}>{user.username}</li>
+      }
+    })
+  }
+
+  //render emojis on hover over for mafia
+  killHoverOn = (event) => {
+    // let username = event.target.username
+    this.setState({
+      hoveredOn: event.target.innerText
+    })
+  }
+
+  killHoverOff = () => {
+    this.setState({
+      hoveredOn: ''
     })
   }
 

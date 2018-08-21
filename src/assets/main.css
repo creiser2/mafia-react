@@ -77,12 +77,6 @@
   background-color: #5A2EFF;
 }
 
-.bg-purple-murder:hover {
-  color: #a50b0b;
-  text-decoration: line-through;
-  transition: .2s;
-}
-
 .bg-blood-red {
   background-color: #a50b0b;
 }
@@ -192,6 +186,18 @@
   margin-top: 0.6em;
   font-size: 1.5em;
   border-radius: 0.333em;
+}
+
+.start-game-button {
+  font-size: 1.5em;
+}
+
+.start-button-div {
+  background-color: #FF4C74;
+}
+
+.start-button-div:hover {
+  background-color: #000;
 }
 
 .big-question {

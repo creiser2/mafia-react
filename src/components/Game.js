@@ -52,8 +52,9 @@ class Game extends Component {
 
   //called when mafioso selects who to kill
   handleKillVictim = (event) => {
+    debugger;
     //grab victim's username
-    let victimUsername = event.target.innerText
+    let victimUsername = event.target.id
     //find victim obj and set his status to dead
     let victimObj = this.props.users.filter(user => user.username === victimUsername)[0]
     //get the ID and broadcast out the id of the victim that will be terminated
