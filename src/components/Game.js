@@ -299,7 +299,7 @@ class Game extends Component {
           //set state to game over
           return <TownsfolkLose />
         } else {
-          return <MafiaWin />
+          return <MafiaWin player={this.props.user.username}/>
         }
       }
     } else {

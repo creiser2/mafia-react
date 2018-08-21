@@ -87,6 +87,10 @@
   border: 1rem solid #FF4C74;
 }
 
+.border-red {
+  border: 1rem solid #a50b0b;
+}
+
 .mb2 {
   margin-bottom: 2rem;
 }
@@ -125,6 +129,12 @@
 
 .mafia-dude {
   background: url("/mafia-dude.jpg");
+  background-size: cover;
+  background-repeat: none;
+}
+
+.mafia-dude-2 {
+  background: url("/mafia-dude-2.jpg");
   background-size: cover;
   background-repeat: none;
 }
