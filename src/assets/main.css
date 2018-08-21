@@ -174,7 +174,7 @@
   width: 30px;
   margin-right: 12em;
   margin-left: 12em;
-  margin-bottom: 6em;
+  margin-bottom: 14em;
   border-radius: 0.333em;
   color: #FFF;
   padding-top: 3em;
@@ -213,6 +213,11 @@ ol, ul {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.log-scroll {
+  color: white;
+  margin-top: 20em;
 }
 
 

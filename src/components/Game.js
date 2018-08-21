@@ -364,6 +364,11 @@ class Game extends Component {
           this.setState({
             log: `${response.user.username} has disconnected.`
           })
+          // setTimeout(() => {
+          //   this.setState({
+          //     log: ""
+          //   })
+          // }, 10000)
         }
         break;
       case "CAST_VOTE":

@@ -14,6 +14,7 @@ class Lobby extends Component {
   state = {
     startGame: false,
     startGameEmoji: "",
+    log: ""
   }
 
   componentDidMount = () => {
@@ -48,6 +49,14 @@ class Lobby extends Component {
         break;
       case "DC_USER":
         this.props.setUsers(response.updated_users)
+        this.setState({
+          log: `${response.user.username} has disconnected.`
+        })
+        setTimeout(() => {
+          this.setState({
+            log: ""
+          })
+        }, 10000)
         break;
       case "START_GAME":
         this.handleGameStarted()
@@ -121,6 +130,8 @@ class Lobby extends Component {
             {this.renderStartGameButton()}
             </ul>
           </div>
+            {/* scroll bar for updates */}
+            <marquee behavior="scroll" direction="left" className="log-scroll mafia-font">{this.state.log}</marquee>
           </div>
         }
       </Fragment>
