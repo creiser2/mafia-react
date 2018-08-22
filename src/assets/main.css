@@ -190,6 +190,9 @@
 
 .start-game-button {
   font-size: 1.5em;
+  font-family: 'LemonMilk';
+  background-color: black;
+  color: white;
 }
 
 .start-button-div {
@@ -231,4 +234,8 @@ ol, ul {
   max-height: 76vh;
   overflow: scroll;
   margin: 1em auto;
+}
+
+.tac {
+  text-align: center;
 }

@@ -66,7 +66,7 @@ class Lobby extends Component {
   renderStartGameButton = () => {
     if(this.props.isHost) {
       return (
-          <button className='mafia-button start-game-button' onClick={this.startGame} onMouseEnter={this.startGameHoverOn} onMouseLeave={this.startGameHoverOff}>START GAME {this.state.startGameEmoji}</button>
+          <button className='start-game-button' onClick={this.startGame} onMouseEnter={this.startGameHoverOn} onMouseLeave={this.startGameHoverOff}>START GAME {this.state.startGameEmoji}</button>
       )
     }
   }
@@ -120,12 +120,12 @@ class Lobby extends Component {
                 onReceived={this.updateUsers}
               />
             {this.renderUsersList()}
-            {this.renderStartGameButton()}
             </ul>
           </div>
             <div className='log-div'>
               <marquee behavior="scroll" direction="left" className="log-scroll mafia-font">{this.props.lobbyLog}</marquee>
             </div>
+            {this.renderStartGameButton()}
           </div>
         }
       </Fragment>

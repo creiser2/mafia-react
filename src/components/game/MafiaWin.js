@@ -6,7 +6,7 @@ const MafiaWin = props => {
       <div className = 'bg-black blood-red f jcc'>
         <h2 className='mafia-font'>The Mafioso Has Won</h2>
       </div>
-      <div className = "p1 bg-black hot-pink mb2 bottom rel mxa mw-10 br10 top-600">
+      <div className = "p1 bg-black blood-red mb2 bottom rel mxa mw-10 br10 top-600">
         <h2>Player: {props.player}</h2>
       </div>
     </div>

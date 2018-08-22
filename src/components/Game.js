@@ -161,10 +161,10 @@ class Game extends Component {
 
     //if there's a tie, townsfolk can't kill anyone
     if(popularVote.tied) {
-      console.log("TIE")
       this.props.clearVotes()
       this.props.setTurn('mafia')
-
+      //send a log out notifying that no one died
+      this.props.updateLog("🤷‍ The townsfolk votes were tied! Nobody is killed by the townsfolk! 🤷‍")
       this.setState({
         voteCount: 0,
         voted: false,

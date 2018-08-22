@@ -1,9 +1,9 @@
 import React from "react";
-
+import Emoji from "../Emoji"
 const WaitForVotes = props => {
   return (
-    <div className = 'bg-black abs f fill jcc aic'>
-      <h2 className='mafia-font white'>{'\u2b50'}Waiting on other voters...{'\u2b50'}</h2>
+    <div className = 'bg-black abs f fill jcc aic tac'>
+      <h2 className='mafia-font white'>{<Emoji symbol="⏳" label="hourglass"/>}Waiting on other voters...{<Emoji symbol="⏳" label="hourglass"/>}</h2>
     </div>
   )
 }
