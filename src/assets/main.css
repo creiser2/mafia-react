@@ -217,7 +217,12 @@ ol, ul {
 
 .log-scroll {
   color: white;
-  margin-top: 20em;
+}
+
+.log-div {
+  position: fixed;
+  bottom: 0px;
+  width: 100vh;
 }
 
 

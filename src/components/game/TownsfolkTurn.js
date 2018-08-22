@@ -58,6 +58,9 @@ class MafiaKill extends Component {
         :
           null
         }
+        <div className='log-div'>
+          <marquee behavior="scroll" direction="left" className="log-scroll mafia-font">{this.props.log}</marquee>
+        </div>
       </div>
     )
   }
@@ -69,7 +72,8 @@ function msp(state) {
     user: state.user,
     turn: state.turn,
     lobbyId: state.lobbyId,
-    votes: state.votes
+    votes: state.votes,
+    log: state.log
   }
 }
 

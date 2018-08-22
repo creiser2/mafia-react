@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 import { connect } from 'react-redux';
-import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION, KILL_VICTIM, CAST_VOTE } from '../constants/api-endpoints'
+import { API_WS_ROOT, HEADERS, UPDATE_USER_STATUS, PICK_MAFIA, UPDATE_LOBBY_PROTECTION, KILL_VICTIM, CAST_VOTE, GET_MAFIA_KILL_STORY } from '../constants/api-endpoints'
 
 //components
 import MafiaKill from './game/MafiaKill'
@@ -15,11 +15,11 @@ import MafiaLose from './game/MafiaLose'
 import MafiaWin from './game/MafiaWin'
 import SelectingMafia from './game/SelectingMafia'
 
+import Emoji from './Emoji'
 
 class Game extends Component {
   state = {
     openGame: false,
-    log: "",
     alive: true,
     voted: false,
     voteCount: 0,
@@ -27,6 +27,12 @@ class Game extends Component {
     mafiaWon: false,
   }
 
+  //list of how the mafia kills people
+  mafiaStories = (victim) => {
+    return [`the mafia cut ${victim}'s brakelights out`, `the mafia poisoned ${victim}'s drink with 💊 at a dinner party`]
+  }
+
+  //calls get random mafia
   componentDidMount = () => {
     //if the mafia does not exist, get one
     if(!this.props.mafiaExists) {
@@ -34,6 +40,7 @@ class Game extends Component {
     }
   }
 
+  //initial get a random mafia
   getRandomMafia = () => {
     //let the host send out mafia request
     if(this.props.isHost) {
@@ -52,7 +59,6 @@ class Game extends Component {
 
   //called when mafioso selects who to kill
   handleKillVictim = (event) => {
-    debugger;
     //grab victim's username
     let victimUsername = event.target.id
     //find victim obj and set his status to dead
@@ -94,6 +100,7 @@ class Game extends Component {
     })
   }
 
+  //vote formatted here
   handleIncomingVote = (voterId, recipient) => {
     //maybe do something with voter ID later, but
     //vote structure will be like {recipient.username: VOTE_COUNT}
@@ -247,7 +254,25 @@ class Game extends Component {
     //checks to see if mafia has won
     this.checkMafiaWin()
 
-    //finally we must switch the turn to the townsfolk
+    //update log to reflect changes
+    if(incomingTurn === 'townsfolk') {
+      //let the mafia send out the broadcast to get the story how he killed someone
+      if(this.props.user.role === 'mafia') {
+        fetch(GET_MAFIA_KILL_STORY, {
+          method: 'POST',
+          headers: HEADERS,
+          body: JSON.stringify({
+            lobby_id: this.props.lobbyId,
+            victim_username: victim.username
+          })
+        })
+      }
+      // this.props.updateLog(this.getMafiaKillStory(victim.username))
+    } else {
+      this.props.updateLog(`The townsfolk got together and killed ${victim.username}`)
+    }
+
+    //finally we must switch the turn to the townsfolk or mafia respectively
     this.props.setTurn(incomingTurn)
   }
 
@@ -325,7 +350,7 @@ class Game extends Component {
     })
   }
 
-
+  //render the townsfolk's move
   renderTownsfolkTurn = () => {
     return <TownsfolkTurn vote={this.castVote} votes={this.state.votes}/>
   }
@@ -360,19 +385,13 @@ class Game extends Component {
         this.props.setUsers(response.updated_users)
         if(response.user.role === "mafia") {
           // window.close()
-        } else {
-          this.setState({
-            log: `${response.user.username} has disconnected.`
-          })
-          // setTimeout(() => {
-          //   this.setState({
-          //     log: ""
-          //   })
-          // }, 10000)
         }
         break;
       case "CAST_VOTE":
         this.handleIncomingVote(response.voter_id, response.recipient)
+        break;
+      case "MAFIA_KILL_STORY":
+        this.props.updateLog(response.story)
         break;
     }
   }
@@ -401,7 +420,8 @@ function msp(state) {
     isHost: state.isHost,
     turn: state.turn,
     mafiaExists: state.mafiaExists,
-    votes: state.votes
+    votes: state.votes,
+    log: state.log
   }
 }
 
@@ -439,6 +459,9 @@ function mdp(dispatch) {
     },
     clearVotes: () => {
       dispatch({type: "CLEAR_VOTES"})
+    },
+    updateLog: (incomingLog) => {
+      dispatch({type: "UPDATE_LOG", payload: incomingLog})
     }
   }
 }

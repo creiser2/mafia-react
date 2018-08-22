@@ -10,6 +10,8 @@ const defaultState = {
   mafiaExists: false,
   turn: "mafia",
   votes: [],
+  lobbyLog: "",
+  log: ""
 }
 
 
@@ -90,6 +92,14 @@ export default function reducer(state = defaultState, action) {
     case "CLEAR_VOTES":
       return {
         ...state, votes: []
+      }
+    case "UPDATE_LOBBY_LOG":
+      return {
+        ...state, lobbyLog: action.payload
+      }
+    case "UPDATE_LOG":
+      return {
+        ...state, log: action.payload
       }
     default:
       return state;

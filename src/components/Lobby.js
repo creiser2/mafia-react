@@ -49,14 +49,7 @@ class Lobby extends Component {
         break;
       case "DC_USER":
         this.props.setUsers(response.updated_users)
-        this.setState({
-          log: `${response.user.username} has disconnected.`
-        })
-        setTimeout(() => {
-          this.setState({
-            log: ""
-          })
-        }, 10000)
+        this.props.updateLobbyLog(`${response.user.username} has disconnected.`)
         break;
       case "START_GAME":
         this.handleGameStarted()
@@ -130,8 +123,9 @@ class Lobby extends Component {
             {this.renderStartGameButton()}
             </ul>
           </div>
-            {/* scroll bar for updates */}
-            <marquee behavior="scroll" direction="left" className="log-scroll mafia-font">{this.state.log}</marquee>
+            <div className='log-div'>
+              <marquee behavior="scroll" direction="left" className="log-scroll mafia-font">{this.props.lobbyLog}</marquee>
+            </div>
           </div>
         }
       </Fragment>
@@ -148,7 +142,9 @@ function msp(state) {
     username: state.username,
     users: state.users,
     user: state.user,
-    isHost: state.isHost
+    isHost: state.isHost,
+    lobbyLog: state.lobbyLog
+    // log: state.log
   }
 }
 
@@ -165,6 +161,9 @@ function mdp(dispatch) {
     },
     setUsers: (users) => {
       dispatch({type: "SET_USERS", payload: users})
+    },
+    updateLobbyLog: (incomingLog) => {
+      dispatch({type: "UPDATE_LOBBY_LOG", payload: incomingLog})
     }
   }
 }
