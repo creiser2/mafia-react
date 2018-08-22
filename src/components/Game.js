@@ -283,7 +283,7 @@ class Game extends Component {
       return <MafiaKill killVictim={this.handleKillVictim} alivePlayers={this.getAlivePlayers()}/>
     //else, render sleep turn for townsfolk
     } else {
-      return <TownsfolkSleep />
+      return <TownsfolkSleep log={this.props.lobbyLog}/>
     }
   }
 
