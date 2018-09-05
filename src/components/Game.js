@@ -373,7 +373,6 @@ class Game extends Component {
         })
         //mafia now exists
         this.props.setMafiaExists(true)
-
         break;
 
       //mafia has selected someone to kill, update accordingly (this will also trigger a turn change)
