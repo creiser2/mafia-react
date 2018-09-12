@@ -1,7 +1,7 @@
 run npm start to begin
 
-Homescreen
-![Alt text](./game_images/homescreen.png?raw=true "Homescreen")
+- user must host lobby in order for others to join
+- host must start the game
 
 
-
+*see "game_images" folder for preview*
